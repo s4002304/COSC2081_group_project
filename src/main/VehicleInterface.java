@@ -7,7 +7,7 @@ interface VehicleInterface {
 
     Port getCurrentPort();
 
-    void SetCurrentPort(Port port);
+    void setCurrentPort(Port port);
 
     int getTotalNumberOfContainers();
 

@@ -15,12 +15,17 @@ public abstract class Vehicle implements VehicleInterface {
     private ArrayList<Class> containerType;
     private HashMap<String, Container> currentContainers;
 
-    public Vehicle(String id, String name, double carryingCapacity, double currentFuel, double fuelCapacity) {
+    public Vehicle(String id, String name, double carryingCapacity,
+            double currentFuel, double fuelCapacity) {
         this.id = id;
         this.name = name;
         this.carryingCapacity = carryingCapacity;
         this.currentFuel = currentFuel;
         this.fuelCapacity = fuelCapacity;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -41,7 +46,8 @@ public abstract class Vehicle implements VehicleInterface {
 
     public int getTotalNumberOfContainersByTypes(Class containerType) {
         int count = 0;
-        for (Map.Entry<String, Container> set : this.currentContainers.entrySet()) {
+        for (Map.Entry<String, Container> set : this.currentContainers
+                .entrySet()) {
             Container currentContainer = set.getValue();
             if (containerType.isInstance(currentContainer)) {
                 count += 1;

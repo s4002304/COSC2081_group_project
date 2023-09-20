@@ -23,6 +23,10 @@ public class Port implements PortInterface {
         this.landingAbility = landingAbility;
     }
 
+    public String getId() {
+        return this.id;
+    }
+
     public String getName() {
         return this.name;
     }

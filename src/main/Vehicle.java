@@ -64,25 +64,46 @@ public abstract class Vehicle implements VehicleInterface {
         return this.totalWeight;
     }
 
+    public void updateTotalWeight() {
+        double totalWeight = 0;
+        for (Container container : this.currentContainers.values()) {
+            totalWeight += container.getWeight();
+        }
+        this.totalWeight = totalWeight;
+    }
+
     public HashMap<String, Container> getAllContainers() {
         return this.currentContainers;
     }
 
     public boolean isLoadable(HashMap<String, Container> containers) {
-        // TODO: Implement
-        return false;
+        double totalWeight = 0;
+        for (Container container : containers.values()) {
+            totalWeight += container.getWeight();
+        }
+        return totalWeight + this.totalWeight <= this.carryingCapacity;
     }
 
     public void loadContainer(Container container) {
-        // TODO: Implement
+        this.currentContainers.put(container.getId(), container);
+        this.updateTotalWeight();
     }
 
     public void unloadContainer(Container container) {
-        // TODO: Implement
+        this.currentContainers.remove(container.getId());
+        this.updateTotalWeight();
     }
 
     public boolean isTravelableToPort(Port port) {
-        // TODO: Implement
-        return false;
+        double distance = this.currentPort.getDistanceToPort(port);
+        double fuelRequirement = 0;
+        for (Container container : this.currentContainers.values()) {
+            if (this instanceof Truck) {
+                fuelRequirement += container.getTruckFuelRequirement(distance);
+            } else if (this instanceof Ship) {
+                fuelRequirement += container.getShipFuelRequirement(distance);
+            }
+        }
+        return fuelRequirement <= this.currentFuel;
     }
 }

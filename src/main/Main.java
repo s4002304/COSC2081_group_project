@@ -5,12 +5,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
-    private static ArrayList<User> users = new ArrayList<>();
-    private static User currentUser = null;
-    private static HashMap<String, Port> ports = new HashMap<>();
-
     public static void main(String[] args) throws Exception {
-        initializeUsersAndPorts();
         SystemController controller = new SystemController();
 
         Scanner scanner = new Scanner(System.in);
@@ -33,7 +28,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    if (currentUser == null) {
+                    if (!controller.isLoggedIn()) {
                         // Only allow login if not already logged in
                         System.out.println("Please log in:");
                         System.out.print("Username: ");
@@ -42,17 +37,17 @@ public class Main {
                         String password = scanner.nextLine();
 
                         // Attempt to log in the user
-                        currentUser = loginUser(username, password);
+                        controller.login(username, password);
 
-                        if (currentUser == null) {
-                            System.out.println("Invalid username or password. Please try again.");
-                        } else {
+                        if (controller.isLoggedIn()) {
                             System.out.println("Login successful. Welcome, "
-                                    + currentUser.getUsername() + "!");
+                                    + username + "!");
+                        } else {
+                            System.out.println("Invalid username or password. Please try again.");
                         }
                     } else {
                         System.out.println(
-                                "You are already logged in as " + currentUser.getUsername() + ".");
+                                "You are already logged in as.");
                     }
                     break;
                 case 2:
@@ -64,9 +59,9 @@ public class Main {
                     break;
             }
 
-            if (currentUser != null && isRunning) {
+            if (controller.isLoggedIn() && isRunning) {
                 // User is logged in, show role-based menu
-                showRoleMenu();
+                controller.showRoleMenu();
                 choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
@@ -80,7 +75,7 @@ public class Main {
                         // Call methods from the controller for functionalities
                         break;
                     case 4:
-                        currentUser = null; // Logout
+                        controller.logout(); // Logout
                         break;
                     default:
                         System.out.println("Invalid choice. Please select a valid option.");
@@ -90,42 +85,4 @@ public class Main {
         }
     }
 
-    private static void initializeUsersAndPorts() {
-        // Initialize predefined users and ports
-        User admin = new User("admin", "admin", UserRole.SYSTEM_ADMIN);
-        User manager1 = new User("manager1", "password", UserRole.PORT_MANAGER);
-        User manager2 = new User("manager2", "password", UserRole.PORT_MANAGER);
-
-        users.add(admin);
-        users.add(manager1);
-        users.add(manager2);
-
-        Port port1 = new Port("Port1", "Port One", 0.0, 0.0, 1000.0, true);
-        Port port2 = new Port("Port2", "Port Two", 0.0, 0.0, 800.0, true);
-
-        ports.put(port1.getId(), port1);
-        ports.put(port2.getId(), port2);
-
-        // Assign ports to managers
-        manager1.assignPort(port1.getId(), port1);
-        manager2.assignPort(port2.getId(), port2);
-    }
-
-    private static User loginUser(String username, String password) {
-        for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return user;
-            }
-        }
-        return null; // User not found or password is incorrect
-    }
-
-    private static void showRoleMenu() {
-        System.out.println("Role: " + currentUser.getRole());
-        System.out.println("Select an option:");
-        System.out.println("1. View Information");
-        System.out.println("2. Modify Information");
-        System.out.println("3. Process Entities");
-        System.out.println("4. Logout");
-    }
 }

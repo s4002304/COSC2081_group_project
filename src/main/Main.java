@@ -132,6 +132,26 @@ public class Main {
                                 controller.deleteContainerById(id);
                             }
                             break;
+                        case 13, 17:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.loadContainerToVehicle(scanner);
+                            }
+                            break;
+                        case 14:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.unloadContainerFromVehicle(scanner);
+                            }
+                            break;
+                        case 15:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.assignVehicleToPort(scanner);
+                            }
+                            break;
+                        case 16:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.assignContainerToPort(scanner);
+                            }
+                            break;
                         case 0:
                             // Logout
                             controller.logout();

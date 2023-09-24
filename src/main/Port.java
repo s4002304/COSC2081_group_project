@@ -10,8 +10,8 @@ public class Port implements PortInterface {
     private double longtitude;
     private double storingCapacity;
     private boolean landingAbility;
-    HashMap<String, Container> currentContainers;
-    HashMap<String, Vehicle> currentVehicles;
+    HashMap<String, Container> currentContainers = new HashMap<>();
+    HashMap<String, Vehicle> currentVehicles = new HashMap<>();
     HashMap<String, TrafficHistory> trafficHistoryList;
 
     public Port(String id, String name, double latitude, double longtitude, double storingCapacity,
@@ -122,6 +122,11 @@ public class Port implements PortInterface {
         this.currentVehicles.put(vehicle.getId(), vehicle);
     }
 
+    public void addContainer(Container container) {
+        this.currentContainers.put(container.getId(), container);
+    }
+
+
     public void removeVehicle(String id) {
         Vehicle vehicle = this.currentVehicles.get(id);
         HashMap<String, Container> containers = vehicle.getAllContainers();
@@ -136,6 +141,24 @@ public class Port implements PortInterface {
     }
 
     public String toString() {
-        return "Id: " + this.id + " Name: " + this.name + " Latitude: " + this.latitude + " Longtitude: " + this.longtitude + " Storing capacity: " + this.storingCapacity + " Landing ability: " + this.landingAbility + "\n";
+        StringBuilder result = new StringBuilder("Id: " + this.id + " Name: " + this.name + " Latitude: " + this.latitude + " Longtitude: " + this.longtitude + " Storing capacity: " + this.storingCapacity + " Landing ability: " + this.landingAbility + "\n");
+        result.append("Containers:\n");
+        if (!this.currentContainers.isEmpty()) {
+            for (Container container : this.currentContainers.values()) {
+                result.append(container.toString());
+            }
+        } else {
+            result.append("None\n");
+        }
+        result.append("Vehicles:\n");
+        if (!this.currentVehicles.isEmpty()) {
+            for (Vehicle vehicle : this.currentVehicles.values()) {
+                result.append(vehicle.toString());
+            }
+        } else {
+            result.append("None\n");
+        }
+
+        return result.toString();
     }
 }

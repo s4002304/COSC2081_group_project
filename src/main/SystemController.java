@@ -568,22 +568,86 @@ public class SystemController {
         }
     }
 
-    public void loadContainerToVehicle(Vehicle vehicle, Container container) {
+    public void loadContainerToVehicle(Scanner scanner) {
+        System.out.print("What is the Vehicle id:");
+        String vehicleId = scanner.nextLine();
+        if (!this.vehicles.containsKey(vehicleId)) {
+            System.out.println("Vehicle does not exist");
+            return;
+        }
+        System.out.print("What is the Container id:");
+        String containerId = scanner.nextLine();
+        if (!this.containers.containsKey(containerId)) {
+            System.out.println("Container does not exist");
+            return;
+        }
+        Vehicle vehicle = this.vehicles.get(vehicleId);
+        Container container = this.containers.get(containerId);
         if (vehicle.isLoadable(container)) {
             vehicle.loadContainer(container);
         }
     }
 
-    public void unloadContainerFromVehicle(Vehicle vehicle, Container container) {
+    public void unloadContainerFromVehicle(Scanner scanner) {
+        System.out.print("What is the Vehicle id:");
+        String vehicleId = scanner.nextLine();
+        if (!this.vehicles.containsKey(vehicleId)) {
+            System.out.println("Vehicle does not exist");
+            return;
+        }
+        System.out.print("What is the Container id:");
+        String containerId = scanner.nextLine();
+        if (!this.containers.containsKey(containerId)) {
+            System.out.println("Container does not exist");
+            return;
+        }
+        Vehicle vehicle = this.vehicles.get(vehicleId);
+        Container container = this.containers.get(containerId);
         Port currentPort = vehicle.getCurrentPort();
         if (currentPort.isUnloadable(container)) {
             currentPort.unloadContainer(vehicle, container);
+        } else {
+            System.out.println("Port capacity overloaded");
         }
     }
 
-    public void assignVehicleToPort(Port port, Vehicle vehicle) {
+    public void assignVehicleToPort(Scanner scanner) {
+        System.out.print("What is the Port id:");
+        String portId = scanner.nextLine();
+        if (!this.ports.containsKey(portId)) {
+            System.out.println("Port does not exist");
+            return;
+        }
+        System.out.print("What is the vehicle id:");
+        String vehicleId = scanner.nextLine();
+        if (!this.vehicles.containsKey(vehicleId)) {
+            System.out.println("Vehicle does not exist");
+            return;
+        }
+        Vehicle vehicle = this.vehicles.get(vehicleId);
+        Port port = this.ports.get(portId);
         if (this.isAuthorized(this.currentUser, port.getId())) {
             port.addVehicle(vehicle);
+        }
+    }
+
+    public void assignContainerToPort(Scanner scanner) {
+        System.out.print("What is the Port id:");
+        String portId = scanner.nextLine();
+        if (!this.ports.containsKey(portId)) {
+            System.out.println("Port does not exist");
+            return;
+        }
+        System.out.print("What is the Container id:");
+        String containerId = scanner.nextLine();
+        if (!this.containers.containsKey(containerId)) {
+            System.out.println("Container does not exist");
+            return;
+        }
+        Container container = this.containers.get(containerId);
+        Port port = this.ports.get(portId);
+        if (this.isAuthorized(this.currentUser, port.getId())) {
+            port.addContainer(container);
         }
     }
 
@@ -635,9 +699,9 @@ public class SystemController {
             System.out.println("15. Assign A Vehicle To Port ");
             System.out.println("16. Assign A Container To Port ");
             System.out.println("17. Assign A Container To Vehicle ");
-            System.out.println("18. Move A Vehicle To Port ");
-            System.out.println("19. Refuel A Vehicle ");
-            System.out.println("20. Show Traffic History ");
+            //System.out.println("18. Move A Vehicle To Port ");
+            //System.out.println("19. Refuel A Vehicle ");
+            //System.out.println("20. Show Traffic History ");
         }
         System.out.println("0. Logout");
     }

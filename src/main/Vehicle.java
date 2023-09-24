@@ -13,7 +13,7 @@ public abstract class Vehicle implements VehicleInterface {
     private double carryingCapacity;
     private double totalWeight;
     protected ArrayList<Class> containerType =  new ArrayList<>();
-    private HashMap<String, Container> currentContainers;
+    private HashMap<String, Container> currentContainers = new HashMap<>();
 
     public Vehicle(String id, String name, double carryingCapacity,
             double currentFuel, double fuelCapacity) {
@@ -126,6 +126,15 @@ public abstract class Vehicle implements VehicleInterface {
     }
 
     public String toString() {
-        return "Id: " + this.id + " Name: " + this.name + " Type: " + this.getClass().getSimpleName() + "\n";
+        StringBuilder result = new StringBuilder("Id: " + this.id + " Name: " + this.name + " Type: " + this.getClass().getSimpleName() + "\n" + "Containers: ");
+        if (!this.currentContainers.isEmpty()) {
+            for (Container container : this.currentContainers.values()) {
+                result.append(container.toString());
+            }
+        } else {
+            result.append("None\n");
+        }
+
+        return result.toString();
     }
 }

@@ -21,16 +21,7 @@ public class SystemController {
         this.initializePortData();
         this.initializeVehicleData();
         this.initializeUserData();
-
-        // for (String name : this.ports.keySet()) {
-        // String key = name.toString();
-        // String value = this.ports.get(name).toString();
-        // System.out.println(key + " " + value);
-        // }
-        // Port port1 = this.ports.get("p-1");
-        // Port port2 = this.ports.get("p-2");
-        // double distance = port1.getDistanceToPort(port2);
-        // System.out.println(distance);
+        this.vehicles.get("tr-2").isLoadable(this.containers);
     }
 
     // Intializing Container Data
@@ -167,13 +158,73 @@ public class SystemController {
         return this.currentUser != null;
     }
 
+    public boolean isAuthorized(User user, String portId) {
+        if (user.getRole() == UserRole.SYSTEM_ADMIN) {
+            return true;
+        } else {
+            return user.getAssignedPort().getId().equals(portId);
+        }
+    }
+
+    public void createContainer(Scanner scanner) {
+        try {
+            System.out.println("Select a container type:");
+            System.out.println("1. Dry Storage");
+            System.out.println("2. Open Top");
+            System.out.println("3. Open Side");
+            System.out.println("4. Refrigerated");
+            System.out.println("5. Liquid");
+            int containerTypeChoice = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("What is the container id:");
+            String id = scanner.nextLine();
+            if (this.containers.containsKey(id)) {
+                System.out.println("Container id must be unique");
+                return;
+            }
+            System.out.print("What is the container weight (min 0, max 10):");
+            double weight = scanner.nextDouble();
+            if (weight<0 || weight>10) {
+                System.out.println("Weight must be in range 0-10");
+                return;
+            }
+            scanner.nextLine();
+            switch (containerTypeChoice) {
+                case 1:
+                    this.containers.put(id, new DryStorage(id, weight));
+                case 2:
+                    this.containers.put(id, new OpenTop(id, weight));
+                case 3:
+                    this.containers.put(id, new OpenSide(id, weight));
+                case 4:
+                    this.containers.put(id, new Refrigerated(id, weight));
+                case 5:
+                    this.containers.put(id, new Liquid(id, weight));
+            }
+            System.out.println("Container created!");
+            System.out.println(this.containers.get(id).toString());
+        } catch(Exception e) {
+            System.out.println("Error:" + e);
+        }
+    }
+
+    public Container findContainerById(String id) {
+        return this.containers.get(id);
+    }
+
+    public void deleteContainerById(String id) {
+        this.containers.remove(id);
+    }
+
+    public void updateContainerById(String id, Scanner input) {
+
+    }
+
     public void showRoleMenu() {
         System.out.println("Role: " + this.getCurrentUser().getRole());
         System.out.println("Select an option:");
-        System.out.println("1. View Information");
-        System.out.println("2. Modify Information");
-        System.out.println("3. Process Entities");
-        System.out.println("4. Logout");
+        System.out.println("1. Create container");
+        System.out.println("0. Logout");
     }
 
     public void listAllContainers(User user) {

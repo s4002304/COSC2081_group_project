@@ -66,7 +66,7 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        // Call methods from the controller for functionalities
+                        controller.createContainer(scanner);
                         break;
                     case 2:
                         // Call methods from the controller for functionalities
@@ -74,7 +74,7 @@ public class Main {
                     case 3:
                         // Call methods from the controller for functionalities
                         break;
-                    case 4:
+                    case 0:
                         controller.logout(); // Logout
                         break;
                     default:

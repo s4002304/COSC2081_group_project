@@ -2,11 +2,15 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.IOException;
 import java.nio.file.Paths;
-
+import java.text.SimpleDateFormat;
 public class SystemController {
     private HashMap<String, Port> ports;
     private HashMap<String, Vehicle> vehicles;
@@ -14,18 +18,23 @@ public class SystemController {
     private HashMap<String, User> users;
     private User currentUser = null;
     private ArrayList<TrafficHistory> trafficHistories = new ArrayList<>();
+    private Date currentDate;
 
     public SystemController() {
         this.ports = new HashMap<String, Port>();
         this.vehicles = new HashMap<String, Vehicle>();
         this.containers = new HashMap<String, Container>();
         this.users = new HashMap<String, User>();
+        this.initializeData();
+    }
+
+    private void initializeData() {
         this.initializeContainerData();
         this.initializePortData();
         this.initializeVehicleData();
         this.initializeUserData();
+        this.initializeSystemData();
     }
-
     // Intializing Container Data
     public void initializeContainerData() {
         try (Scanner file = new Scanner(Paths.get("src\\data\\containers.txt"))) {
@@ -134,6 +143,31 @@ public class SystemController {
             }
         } catch (IOException xIo) {
             xIo.printStackTrace();
+        }
+    }
+
+    public void setDate(String newDate) {
+        try {
+            this.currentDate = new SimpleDateFormat("yyyy/MM/dd").parse(newDate);
+            File file = new File("src\\data\\system.txt");
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(newDate);
+            bw.close();
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Initializing System
+    public void initializeSystemData() {
+        try (Scanner file = new Scanner(Paths.get("src\\data\\system.txt"))) {
+                String dateString = file.nextLine();
+                this.currentDate = new SimpleDateFormat("yyyy/MM/dd").parse(dateString);
+        } catch (IOException xIo) {
+            xIo.printStackTrace();
+        } catch (java.text.ParseException parseException) {
+            parseException.printStackTrace();
         }
     }
 

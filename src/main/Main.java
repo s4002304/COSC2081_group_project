@@ -64,10 +64,10 @@ public class Main {
 
                     switch (roleChoice) {
                         case 1:
-                            if (controller.getCurrentUser().getRole() == UserRole.PORT_MANAGER ||
-                                    controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
-                                // Call the view data method for the current user's role
-                                controller.listData();
+                            if (controller.getCurrentUser().getRole() == UserRole.PORT_MANAGER) {
+                                // You can add code specific to port manager role here
+                            } else if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                // You can add code specific to admin role here
                             }
                             break;
                         case 2:

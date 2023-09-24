@@ -1,19 +1,21 @@
 package main;
+
 public abstract class Container {
     private String id;
     private double weight;
     private double shipFuelConsumptionWeightPerKm;
     private double truckFuelConsumptionWeightPerKm;
 
-    public Container(String id) {
+    public Container(String id, double weight) {
         this.id = id;
+        this.weight = weight;
     }
 
     public String getId() {
         return this.id;
     }
 
-    public double getWeight () { 
+    public double getWeight() {
         return this.weight;
     }
 
@@ -23,5 +25,9 @@ public abstract class Container {
 
     public double getTruckFuelRequirement(double distance) {
         return this.truckFuelConsumptionWeightPerKm * distance;
+    }
+
+    public String toString() {
+        return "Id: " + this.id + "\nWeight: " + this.weight;
     }
 }

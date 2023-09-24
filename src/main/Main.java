@@ -11,6 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         initializeUsersAndPorts();
+        SystemController controller = new SystemController();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("COSC2081 GROUP ASSIGNMENT");
@@ -46,10 +47,12 @@ public class Main {
                         if (currentUser == null) {
                             System.out.println("Invalid username or password. Please try again.");
                         } else {
-                            System.out.println("Login successful. Welcome, " + currentUser.getUsername() + "!");
+                            System.out.println("Login successful. Welcome, "
+                                    + currentUser.getUsername() + "!");
                         }
                     } else {
-                        System.out.println("You are already logged in as " + currentUser.getUsername() + ".");
+                        System.out.println(
+                                "You are already logged in as " + currentUser.getUsername() + ".");
                     }
                     break;
                 case 2:

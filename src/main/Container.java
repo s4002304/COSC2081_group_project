@@ -19,6 +19,10 @@ public abstract class Container {
         return this.weight;
     }
 
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
     public double getShipFuelRequirement(double distance) {
         return this.shipFuelConsumptionWeightPerKm * distance;
     }
@@ -28,6 +32,6 @@ public abstract class Container {
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nWeight: " + this.weight;
+        return "Id: " + this.id + "\nWeight: " + this.weight + "\nType: " + this.getClass().getSimpleName() + "\n";
     }
 }

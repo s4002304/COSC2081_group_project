@@ -21,7 +21,6 @@ public class SystemController {
         this.initializePortData();
         this.initializeVehicleData();
         this.initializeUserData();
-        this.vehicles.get("tr-2").isLoadable(this.containers);
     }
 
     // Intializing Container Data
@@ -222,10 +221,19 @@ public class SystemController {
 
     public void deleteContainerById(String id) {
         this.containers.remove(id);
+        System.out.println("Container deleted");
     }
 
-    public void updateContainerById(String id, Scanner input) {
-
+    public void updateContainerById(String id, Scanner scanner) {
+        Container container = this.containers.get(id);
+        double weight = scanner.nextDouble();
+        if (weight < 0 || weight > 10) {
+            System.out.println("Weight must be in range 0-10");
+            return;
+        }
+        scanner.nextLine();
+        container.setWeight(weight);
+        System.out.println("Container updated");
     }
 
     public void showRoleMenu() {
@@ -302,6 +310,26 @@ public class SystemController {
             }
         }
     }
+
+    public void loadContainerToVehicle(Vehicle vehicle, Container container) {
+        if (vehicle.isLoadable(container)) {
+            vehicle.loadContainer(container);
+        }
+    }
+
+    public void unloadContainerFromVehicle(Vehicle vehicle, Container container) {
+        Port currentPort = vehicle.getCurrentPort();
+        if (currentPort.isUnloadable(container)) {
+            currentPort.unloadContainers(vehicle, container);
+        }
+    }
+
+    public void assignVehicleToPort(Port port, Vehicle vehicle) {
+        if (this.isAuthorized(this.currentUser, port.getId())) {
+            port.addVehicle(vehicle);
+        }
+    }
+
     public void listData() {
         if (currentUser.getRole() == UserRole.PORT_MANAGER) {
             listPortsForManager();

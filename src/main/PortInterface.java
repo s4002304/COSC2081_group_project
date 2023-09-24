@@ -23,7 +23,7 @@ interface PortInterface {
 
     void loadContainers(Vehicle vehicle, HashMap<String, Container> containers);
 
-    boolean isUnloadable(HashMap<String, Container> containers);
+    boolean isUnloadable(Container container);
 
     void unloadContainers(Vehicle vehicle, HashMap<String, Container> containers);
 

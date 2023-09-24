@@ -256,12 +256,24 @@ public class SystemController {
         return this.containers.get(id);
     }
 
+    public void listAllContainers() {
+        for (Container container : this.containers.values()) {
+            System.out.println(container.toString());
+        }
+    }
+
     public void deleteContainerById(String id) {
         this.containers.remove(id);
         System.out.println("Container deleted");
     }
 
-    public void updateContainerById(String id, Scanner scanner) {
+    public void updateContainer(Scanner scanner) {
+        System.out.print("What is the Container id:");
+        String id = scanner.nextLine();
+        if (!this.containers.containsKey(id)) {
+            System.out.println("Container does not exist");
+            return;
+        }
         Container container = this.containers.get(id);
         double weight = scanner.nextDouble();
         if (weight < 0 || weight > 10) {
@@ -271,6 +283,7 @@ public class SystemController {
         scanner.nextLine();
         container.setWeight(weight);
         System.out.println("Container updated");
+        System.out.println(container.toString());
     }
 
     public void createVehicle(Scanner scanner) {
@@ -330,6 +343,12 @@ public class SystemController {
     public Vehicle findVehicleById(String id) {
         return this.vehicles.get(id);
     }
+    
+    public void listAllVehicles() {
+        for (Vehicle vehicle : this.vehicles.values()) {
+            System.out.println(vehicle.toString());
+        }
+    }
 
     public void deleteVehicleById(String id) {
         Vehicle vehicle = this.vehicles.get(id);
@@ -342,7 +361,13 @@ public class SystemController {
         System.out.println("Vehicle deleted");
     }
 
-    public void updateVehicleById(String id, Scanner scanner) {
+    public void updateVehicle(Scanner scanner) {
+        System.out.print("What is the Vehicle id:");
+        String id = scanner.nextLine();
+        if (!this.vehicles.containsKey(id)) {
+            System.out.println("Vehicle does not exist");
+            return;
+        }
         Vehicle vehicle = this.vehicles.get(id);
         System.out.print("What is the name of the vehicle:");
         String name = scanner.nextLine();
@@ -364,6 +389,8 @@ public class SystemController {
         vehicle.setFuelCapacity(fuelCapacity);
         vehicle.setCurrentFuel(fuelCapacity);
         System.out.println("Vehicle updated");
+        System.out.println(vehicle.toString());
+
     }
 
     public void createPort(Scanner scanner) {
@@ -404,43 +431,79 @@ public class SystemController {
         }
     }
 
-    public void showRoleMenu() {
-        System.out.println("Role: " + this.getCurrentUser().getRole());
-        System.out.println("Select an option:");
-        if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER || this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
-            System.out.println("1. View Data");
-            System.out.println("2. Create Containers");
-        }
-        if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER) {
-            System.out.println("1. View Vehicles ");
-            System.out.println("2. View Containers ");
-            System.out.println("3. Assign Container to Vehicle ");
-            System.out.println("4. Load Container to Vehicle ");
-            System.out.println("5. Unload Container from Vehicle ");
-        } else if (this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
-            System.out.println("1. Create Ports ");
-            System.out.println("2. View Ports ");
-            System.out.println("3. Update Ports ");
-            System.out.println("4. Delete Ports ");
-            System.out.println("5. Create Vehicles ");
-            System.out.println("6. View Vehicles ");
-            System.out.println("7. Update Vehicles ");
-            System.out.println("8. Delete Vehicles ");
-            System.out.println("9. Create Containers ");
-            System.out.println("10. View Containers ");
-            System.out.println("11. Update Containers ");
-            System.out.println("12. Delete Containers ");
-            System.out.println("13. Load A Container To Vehicle ");
-            System.out.println("14. Unload A Container From Vehicle ");
-            System.out.println("15. Assign A Vehicle To Port ");
-            System.out.println("16. Assign A Container To Port ");
-            System.out.println("17. Assign A Container To Vehicle ");
-            System.out.println("18. Move A Vehicle To Port ");
-            System.out.println("19. Refuel A Vehicle ");
-            System.out.println("20. Show Traffic History ");
-        }
-        System.out.println("0. Logout");
+    public Port findPortById(String id) {
+        return this.ports.get(id);
     }
+
+    public void listAllPorts() {
+        for (Port port : this.ports.values()) {
+            System.out.println(port.toString());
+        }
+    }
+
+    public void deletePortById(String id) {
+        Port port = this.ports.get(id);
+        HashMap<String, Vehicle> vehicles = port.getAllVehicles();
+        HashMap<String, Container> containers = port.getAllContainers();
+        if (!vehicles.isEmpty()) {
+            for (Vehicle vehicle : vehicles.values()) {
+                this.deleteContainerById(vehicle.getId());
+            }
+        }
+        if (!containers.isEmpty()) {
+            for (Container container : containers.values()) {
+                this.deletePortById(container.getId());
+            }
+        }
+        this.vehicles.remove(id);
+        System.out.println("Vehicle deleted");
+    }
+
+    public void updatePort(Scanner scanner) {
+        try {
+            System.out.print("What is the Port id to update:");
+            String id = scanner.nextLine();
+            if (!this.ports.containsKey(id)) {
+                System.out.println("Port not exist");
+                return;
+            }
+            System.out.print("What is the name of the port:");
+            String name = scanner.nextLine();
+            System.out.print("What is the latitude (min 0, max 100):");
+            double latitude = scanner.nextDouble();
+            if (latitude < 0 || latitude > 100) {
+                System.out.println("latitude must be in range 0-100");
+                return;
+            }
+            scanner.nextLine();
+            System.out.print("What is the latitude (min 0, max 100):");
+            double longtitude = scanner.nextDouble();
+            if (longtitude < 0 || longtitude > 100) {
+                System.out.println("latitude must be in range 0-100");
+                return;
+            }
+            scanner.nextLine();
+            System.out.print("What is the storing capacity:");
+            double storingCapacity = scanner.nextDouble();
+            scanner.nextLine();
+            System.out.print("What is the landing Ability:");
+            boolean landingAbility = scanner.nextBoolean();
+            scanner.nextLine();
+            Port port = this.ports.get(id);
+            port.setName(name);
+            port.setLatitude(latitude);
+            port.setLongtitude(longtitude);
+            port.setLandingAbility(landingAbility);
+            port.setStoringCapacity(storingCapacity);
+            System.out.println("Port updated!");
+            System.out.println(this.ports.get(id).toString());
+        } catch (Exception e) {
+            System.out.println("Error:" + e);
+        }
+    }
+
+
+    
     public void listPortsForManager() {
         if (currentUser.getRole() == UserRole.PORT_MANAGER) {
             Port assignedPort = currentUser.getAssignedPort();
@@ -543,5 +606,39 @@ public class SystemController {
         } else if (currentUser.getRole() == UserRole.SYSTEM_ADMIN) {
             listEverythingForAdmin();
         }
+    }
+
+    public void showRoleMenu() {
+        System.out.println("Role: " + this.getCurrentUser().getRole());
+        System.out.println("Select an option:");
+        if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER) {
+            System.out.println("1. View Vehicles ");
+            System.out.println("2. View Containers ");
+            System.out.println("3. Assign Container to Vehicle ");
+            System.out.println("4. Load Container to Vehicle ");
+            System.out.println("5. Unload Container from Vehicle ");
+        } else if (this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+            System.out.println("1. Create Ports ");
+            System.out.println("2. View Ports ");
+            System.out.println("3. Update Ports ");
+            System.out.println("4. Delete Ports ");
+            System.out.println("5. Create Vehicles ");
+            System.out.println("6. View Vehicles ");
+            System.out.println("7. Update Vehicles ");
+            System.out.println("8. Delete Vehicles ");
+            System.out.println("9. Create Containers ");
+            System.out.println("10. View Containers ");
+            System.out.println("11. Update Containers ");
+            System.out.println("12. Delete Containers ");
+            System.out.println("13. Load A Container To Vehicle ");
+            System.out.println("14. Unload A Container From Vehicle ");
+            System.out.println("15. Assign A Vehicle To Port ");
+            System.out.println("16. Assign A Container To Port ");
+            System.out.println("17. Assign A Container To Vehicle ");
+            System.out.println("18. Move A Vehicle To Port ");
+            System.out.println("19. Refuel A Vehicle ");
+            System.out.println("20. Show Traffic History ");
+        }
+        System.out.println("0. Logout");
     }
 }

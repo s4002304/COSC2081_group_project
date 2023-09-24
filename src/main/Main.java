@@ -65,16 +65,72 @@ public class Main {
                     switch (roleChoice) {
                         case 1:
                             if (controller.getCurrentUser().getRole() == UserRole.PORT_MANAGER) {
-                                // You can add code specific to port manager role here
-                            } else if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
-                                // You can add code specific to admin role here
+                            }
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.createPort(scanner);
                             }
                             break;
                         case 2:
-                            controller.createContainer(scanner);
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.listAllPorts();
+                            }
                             break;
                         case 3:
-                            // Call methods from the controller for other functionalities
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.updatePort(scanner);
+                            }
+                            break;
+                        case 4:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                System.out.print("What is the Container id:");
+                                String id = scanner.nextLine();
+                                controller.deletePortById(id);
+                            }
+                            break;
+                        case 5:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.createVehicle(scanner);
+                            }
+                            break;
+                        case 6:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.listAllVehicles();
+                            }
+                            break;
+                        case 7:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.updateVehicle(scanner);
+                            }
+                            break;
+                        case 8:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                System.out.print("What is the vehicle id:");
+                                String id = scanner.nextLine();
+                                controller.deleteVehicleById(id);
+                            }
+                            break;
+                        case 9:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.createContainer(scanner);
+                            }
+                            break;
+                        case 10:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                controller.listAllContainers();
+                            }
+                            break;
+                        case 11:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+
+                                controller.updateContainer(scanner);
+                            }
+                            break;
+                        case 12:
+                            if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                System.out.print("What is the Container id:");
+                                String id = scanner.nextLine();
+                                controller.deleteContainerById(id);
+                            }
                             break;
                         case 0:
                             // Logout

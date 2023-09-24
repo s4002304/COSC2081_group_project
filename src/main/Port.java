@@ -40,8 +40,32 @@ public class Port implements PortInterface {
         return this.latitude;
     }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
     public double getLongtitude() {
         return this.longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    public double getStoringCapacity() {
+        return this.storingCapacity;
+    }
+
+    public void setStoringCapacity(double storingCapacity) {
+        this.storingCapacity = storingCapacity;
+    }
+
+    public boolean getLandingAbility() {
+        return this.landingAbility;
+    }
+
+    public void setLandingAbility(boolean landingAbility) {
+        this.landingAbility = landingAbility;
     }
 
     public double getDistanceToPort(Port port) {
@@ -50,10 +74,6 @@ public class Port implements PortInterface {
         double x2 = port.getLatitude();
         double y2 = port.getLongtitude();
         return Math.sqrt((y1 - y2) * (y1 - y2) + (x1 - x2) * (x1 - x2));
-    }
-
-    public boolean getLandingAbility() {
-        return this.landingAbility;
     }
 
     public int getTotalNumberOfVehicles() {
@@ -116,6 +136,6 @@ public class Port implements PortInterface {
     }
 
     public String toString() {
-        return "Id: " + this.id + " Name: " + this.name;
+        return "Id: " + this.id + " Name: " + this.name + " Latitude: " + this.latitude + " Longtitude: " + this.longtitude + " Storing capacity: " + this.storingCapacity + " Landing ability: " + this.landingAbility + "\n";
     }
 }

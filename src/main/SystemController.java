@@ -411,9 +411,36 @@ public class SystemController {
             System.out.println("1. View Data");
             System.out.println("2. Create Containers");
         }
+        if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER) {
+            System.out.println("1. View Vehicles ");
+            System.out.println("2. View Containers ");
+            System.out.println("3. Assign Container to Vehicle ");
+            System.out.println("4. Load Container to Vehicle ");
+            System.out.println("5. Unload Container from Vehicle ");
+        } else if (this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+            System.out.println("1. Create Ports ");
+            System.out.println("2. View Ports ");
+            System.out.println("3. Update Ports ");
+            System.out.println("4. Delete Ports ");
+            System.out.println("5. Create Vehicles ");
+            System.out.println("6. View Vehicles ");
+            System.out.println("7. Update Vehicles ");
+            System.out.println("8. Delete Vehicles ");
+            System.out.println("9. Create Containers ");
+            System.out.println("10. View Containers ");
+            System.out.println("11. Update Containers ");
+            System.out.println("12. Delete Containers ");
+            System.out.println("13. Load A Container To Vehicle ");
+            System.out.println("14. Unload A Container From Vehicle ");
+            System.out.println("15. Assign A Vehicle To Port ");
+            System.out.println("16. Assign A Container To Port ");
+            System.out.println("17. Assign A Container To Vehicle ");
+            System.out.println("18. Move A Vehicle To Port ");
+            System.out.println("19. Refuel A Vehicle ");
+            System.out.println("20. Show Traffic History ");
+        }
         System.out.println("0. Logout");
     }
-
     public void listPortsForManager() {
         if (currentUser.getRole() == UserRole.PORT_MANAGER) {
             Port assignedPort = currentUser.getAssignedPort();

@@ -1,5 +1,0 @@
-p-1&London Port&30.06&92.52&87&true
-p-2&Ho Chi Minh Port&67.24&40.10&94&true
-p-3&Singapore Port&77.47&53.67&82&true
-p-4&Tokyo Port&64.62&22.39&93&false
-p-5&Paris Port&45.65&86.50&70&false

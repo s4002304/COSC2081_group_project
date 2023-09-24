@@ -1,0 +1,6 @@
+admin&admin&system_admin
+manager1&london&port_manager&p-1
+manager2&hochiminh&port_manager&p-2
+manager3&singapore&port_manager&p-3
+manager4&tokyo&port_manager&p-4
+manager5&paris&port_manager&p-5

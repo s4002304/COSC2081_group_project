@@ -273,6 +273,54 @@ public class SystemController {
         System.out.println("Container updated");
     }
 
+    public void createVehicle(Scanner scanner) {
+        try {
+            System.out.println("Select a vehicle type:");
+            System.out.println("1. Ship");
+            System.out.println("2. Truck");
+            System.out.println("3. Reefer Truck");
+            System.out.println("4. Tanker Truck");
+            int containerTypeChoice = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("What is the Vehicle id:");
+            String id = scanner.nextLine();
+            if (this.vehicles.containsKey(id)) {
+                System.out.println("Container id must be unique");
+                return;
+            }
+            System.out.print("What is the carrying capacity (min 0, max 100):");
+            double carryingCapacity = scanner.nextDouble();
+            if (carryingCapacity < 0 || carryingCapacity > 100) {
+                System.out.println("Weight must be in range 0-100");
+                return;
+            }
+            System.out.print("What is the fuel capacity (min 5000, max 10000):");
+            double fuelCapacity = scanner.nextDouble();
+            if (carryingCapacity < 0 || carryingCapacity > 100) {
+                System.out.println("Weight must be in range 0-100");
+                return;
+            }
+            scanner.nextLine();
+            switch (containerTypeChoice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                default:
+                    System.out.println("Invalid Vehicle type choice.");
+                    return;
+            }
+            System.out.println("Vehicle created!");
+            System.out.println(this.containers.get(id).toString());
+        } catch (Exception e) {
+            System.out.println("Error:" + e);
+        }
+    }
+
     public void showRoleMenu() {
         System.out.println("Role: " + this.getCurrentUser().getRole());
         System.out.println("Select an option:");
@@ -374,6 +422,7 @@ public class SystemController {
 
     public void moveVehicleToPort(Vehicle vehicle, Port port) {
         if (vehicle.isTravelableToPort(port)) {
+            this.createTrafficHistory(vehicle.getCurrentPort(), port, vehicle, vehicle.getAllContainers(), this.currentDate, new Date(this.currentDate.getTime()+1000 * 60 * 60 * 24 * 3));
         }
     }
 

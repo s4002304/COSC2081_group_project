@@ -455,8 +455,8 @@ public class SystemController {
                 this.deletePortById(container.getId());
             }
         }
-        this.vehicles.remove(id);
-        System.out.println("Vehicle deleted");
+        this.ports.remove(id);
+        System.out.println("Port deleted");
     }
 
     public void updatePort(Scanner scanner) {

@@ -126,7 +126,6 @@ public class Port implements PortInterface {
         this.currentContainers.put(container.getId(), container);
     }
 
-
     public void removeVehicle(String id) {
         Vehicle vehicle = this.currentVehicles.get(id);
         HashMap<String, Container> containers = vehicle.getAllContainers();

@@ -13,7 +13,6 @@ public class Main {
         System.out.println("Group: Group 26");
         System.out.println("s3978210, Le Dac Duy");
         System.out.println("s4002304, Le Quy Duong");
-        System.out.println("s3927046, To Hai Dang");
         System.out.println("------------------------------------------------");
 
         boolean isRunning = true;
@@ -82,7 +81,7 @@ public class Main {
                             break;
                         case 4:
                             if (controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
-                                System.out.print("What is the Container id:");
+                                System.out.print("What is the Port id:");
                                 String id = scanner.nextLine();
                                 controller.deletePortById(id);
                             }

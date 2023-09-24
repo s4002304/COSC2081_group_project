@@ -218,7 +218,7 @@ public class SystemController {
             }
             System.out.print("What is the container weight (min 0, max 10):");
             double weight = scanner.nextDouble();
-            if (weight<0 || weight>10) {
+            if (weight < 0 || weight > 10) {
                 System.out.println("Weight must be in range 0-10");
                 return;
             }
@@ -226,18 +226,26 @@ public class SystemController {
             switch (containerTypeChoice) {
                 case 1:
                     this.containers.put(id, new DryStorage(id, weight));
+                    break;
                 case 2:
                     this.containers.put(id, new OpenTop(id, weight));
+                    break;
                 case 3:
                     this.containers.put(id, new OpenSide(id, weight));
+                    break;
                 case 4:
                     this.containers.put(id, new Refrigerated(id, weight));
+                    break;
                 case 5:
                     this.containers.put(id, new Liquid(id, weight));
+                    break;
+                default:
+                    System.out.println("Invalid container type choice.");
+                    return;
             }
             System.out.println("Container created!");
             System.out.println(this.containers.get(id).toString());
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Error:" + e);
         }
     }
@@ -248,31 +256,122 @@ public class SystemController {
 
     public void deleteContainerById(String id) {
         this.containers.remove(id);
+        System.out.println("Container deleted");
     }
 
-    public void updateContainerById(String id, Scanner input) {
-
+    public void updateContainerById(String id, Scanner scanner) {
+        Container container = this.containers.get(id);
+        double weight = scanner.nextDouble();
+        if (weight < 0 || weight > 10) {
+            System.out.println("Weight must be in range 0-10");
+            return;
+        }
+        scanner.nextLine();
+        container.setWeight(weight);
+        System.out.println("Container updated");
     }
 
     public void showRoleMenu() {
         System.out.println("Role: " + this.getCurrentUser().getRole());
         System.out.println("Select an option:");
-        System.out.println("1. Create container");
+
+        if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER || this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+            System.out.println("1. View Data");
+            System.out.println("2. Create Containers");
+        }
         System.out.println("0. Logout");
     }
 
-    public void listAllContainers(User user) {
-        if (user.getRole() == UserRole.SYSTEM_ADMIN) {
-            // Admin logic for listing all containers
-            System.out.println("Listing all containers as an admin...");
-        } else if (user.getRole() == UserRole.PORT_MANAGER) {
-            Port assignedPort = user.getAssignedPort();
+    public void listPortsForManager() {
+        if (currentUser.getRole() == UserRole.PORT_MANAGER) {
+            Port assignedPort = currentUser.getAssignedPort();
             if (assignedPort != null) {
-                // Port manager logic for listing containers of their assigned port
-                System.out.println("Listing containers for Port: " + assignedPort.getName());
+                System.out.println("List of Ports:");
+                System.out.println(assignedPort.getName());
             } else {
                 System.out.println("You are not assigned to any port.");
             }
+        }
+    }
+
+    public void listContainersForManager() {
+        if (currentUser.getRole() == UserRole.PORT_MANAGER) {
+            if (containers != null) { // Check if containers is not null
+                Port assignedPort = currentUser.getAssignedPort();
+                if (assignedPort != null) {
+                    HashMap<String, Container> containers = assignedPort.getAllContainers();
+                    System.out.println("List of Containers for your Port:");
+                    for (Container container : containers.values()) {
+                        System.out.println(container.toString());
+                    }
+                } else {
+                    System.out.println("You are not assigned to any port.");
+                }
+            } else {
+                System.out.println("Containers data is not initialized.");
+            }
+        }
+    }
+
+    public void listVehiclesForManager() {
+        if (currentUser.getRole() == UserRole.PORT_MANAGER) {
+            Port assignedPort = currentUser.getAssignedPort();
+            if (assignedPort != null) {
+                HashMap<String, Vehicle> vehicles = assignedPort.getAllVehicles();
+                System.out.println("List of Vehicles for your Port:");
+                for (Vehicle vehicle : vehicles.values()) {
+                    System.out.println(vehicle.toString());
+                }
+            } else {
+                System.out.println("You are not assigned to any port.");
+            }
+        }
+    }
+
+    public void listEverythingForAdmin() {
+        if (currentUser.getRole() == UserRole.SYSTEM_ADMIN) {
+            // List everything here (Ports, Containers, and Vehicles)
+            System.out.println("List of Ports:");
+            for (Port port : ports.values()) {
+                System.out.println(port.toString());
+            }
+            System.out.println("List of Containers:");
+            for (Container container : containers.values()) {
+                System.out.println(container.toString());
+            }
+            System.out.println("List of Vehicles:");
+            for (Vehicle vehicle : vehicles.values()) {
+                System.out.println(vehicle.toString());
+            }
+        }
+    }
+
+    public void loadContainerToVehicle(Vehicle vehicle, Container container) {
+        if (vehicle.isLoadable(container)) {
+            vehicle.loadContainer(container);
+        }
+    }
+
+    public void unloadContainerFromVehicle(Vehicle vehicle, Container container) {
+        Port currentPort = vehicle.getCurrentPort();
+        if (currentPort.isUnloadable(container)) {
+            currentPort.unloadContainers(vehicle, container);
+        }
+    }
+
+    public void assignVehicleToPort(Port port, Vehicle vehicle) {
+        if (this.isAuthorized(this.currentUser, port.getId())) {
+            port.addVehicle(vehicle);
+        }
+    }
+
+    public void listData() {
+        if (currentUser.getRole() == UserRole.PORT_MANAGER) {
+            listPortsForManager();
+            listContainersForManager();
+            listVehiclesForManager();
+        } else if (currentUser.getRole() == UserRole.SYSTEM_ADMIN) {
+            listEverythingForAdmin();
         }
     }
 }

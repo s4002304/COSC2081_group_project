@@ -89,19 +89,19 @@ public class Port implements PortInterface {
         }
     }
 
-    public boolean isUnloadable(HashMap<String, Container> containers) {
+    public boolean isUnloadable(Container container) {
         double totalWeight = 0;
-        for (Container container : containers.values()) {
-            totalWeight += container.getWeight();
-        }
+        totalWeight += container.getWeight();
         return totalWeight + this.getTotalWeight() <= this.storingCapacity;
     }
 
-    public void unloadContainers(Vehicle vehicle, HashMap<String, Container> containers) {
-        for (Container container : containers.values()) {
-            vehicle.unloadContainer(container);
-            this.currentContainers.put(container.getId(), container);
-        }
+    public void unloadContainers(Vehicle vehicle, Container container) {
+        vehicle.unloadContainer(container);
+        this.currentContainers.put(container.getId(), container);
+    }
+
+    public void addVehicle(Vehicle vehicle) {
+        this.currentVehicles.put(vehicle.getId(), vehicle);
     }
 
     public void removeVehicle(String id) {

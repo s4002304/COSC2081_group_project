@@ -76,15 +76,13 @@ public abstract class Vehicle implements VehicleInterface {
         return this.currentContainers;
     }
 
-    public boolean isLoadable(HashMap<String, Container> containers) {
+    public boolean isLoadable(Container container) {
         double totalWeight = 0;
-        for (Container container : containers.values()) {
             if (!this.containerType.contains(container.getClass())) {
                 System.out.println(this.getClass().getSimpleName() + " can not carry " + container.getClass().getSimpleName() + " container.");
                 return false;
             }
             totalWeight += container.getWeight();
-        }
         return totalWeight + this.totalWeight <= this.carryingCapacity;
     }
 
@@ -109,5 +107,9 @@ public abstract class Vehicle implements VehicleInterface {
             }
         }
         return fuelRequirement <= this.currentFuel;
+    }
+
+    public String toString() {
+        return "Id: " + this.id + "\nName: " + this.name + "\nType: " + this.getClass().getSimpleName() + "\n";
     }
 }

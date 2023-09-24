@@ -12,7 +12,7 @@ public abstract class Vehicle implements VehicleInterface {
     private double fuelCapacity;
     private double carryingCapacity;
     private double totalWeight;
-    private ArrayList<Class> containerType;
+    protected ArrayList<Class> containerType =  new ArrayList<>();
     private HashMap<String, Container> currentContainers;
 
     public Vehicle(String id, String name, double carryingCapacity,
@@ -79,6 +79,10 @@ public abstract class Vehicle implements VehicleInterface {
     public boolean isLoadable(HashMap<String, Container> containers) {
         double totalWeight = 0;
         for (Container container : containers.values()) {
+            if (!this.containerType.contains(container.getClass())) {
+                System.out.println(this.getClass().getSimpleName() + " can not carry " + container.getClass().getSimpleName() + " container.");
+                return false;
+            }
             totalWeight += container.getWeight();
         }
         return totalWeight + this.totalWeight <= this.carryingCapacity;

@@ -116,4 +116,8 @@ public class Port implements PortInterface {
     public void removeContainer(String id) {
         this.currentContainers.remove(id);
     }
+
+    public String toString() {
+        return "Id: " + this.id + " Name: " + this.name;
+    }
 }

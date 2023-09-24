@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class SystemController {
     private HashMap<String, Container> containers;
     private HashMap<String, User> users;
     private User currentUser = null;
+    private ArrayList<TrafficHistory> trafficHistories = new ArrayList<>();
 
     public SystemController() {
         this.ports = new HashMap<String, Port>();
@@ -327,6 +330,16 @@ public class SystemController {
     public void assignVehicleToPort(Port port, Vehicle vehicle) {
         if (this.isAuthorized(this.currentUser, port.getId())) {
             port.addVehicle(vehicle);
+        }
+    }
+
+    public void createTrafficHistory(Port departurePort, Port arrivalPort, Vehicle vehicle, HashMap<String, Container> containers, Date departureDate, Date arrivalDate) {
+        TrafficHistory trafficHistory = new  TrafficHistory(vehicle, departurePort, arrivalPort, departureDate, arrivalDate, "incomplete");
+        trafficHistories.add(trafficHistory);
+    }
+
+    public void moveVehicleToPort(Vehicle vehicle, Port port) {
+        if (vehicle.isTravelableToPort(port)) {
         }
     }
 

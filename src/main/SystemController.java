@@ -285,9 +285,11 @@ public class SystemController {
             System.out.print("What is the Vehicle id:");
             String id = scanner.nextLine();
             if (this.vehicles.containsKey(id)) {
-                System.out.println("Container id must be unique");
+                System.out.println("Vehicle id must be unique");
                 return;
             }
+            System.out.print("What is the name of the vehicle:");
+            String name = scanner.nextLine();
             System.out.print("What is the carrying capacity (min 0, max 100):");
             double carryingCapacity = scanner.nextDouble();
             if (carryingCapacity < 0 || carryingCapacity > 100) {
@@ -296,26 +298,107 @@ public class SystemController {
             }
             System.out.print("What is the fuel capacity (min 5000, max 10000):");
             double fuelCapacity = scanner.nextDouble();
-            if (carryingCapacity < 0 || carryingCapacity > 100) {
-                System.out.println("Weight must be in range 0-100");
+            if (fuelCapacity < 5000 || fuelCapacity > 10000) {
+                System.out.println("Weight must be in range 5000-10000");
                 return;
             }
             scanner.nextLine();
             switch (containerTypeChoice) {
                 case 1:
+                    this.vehicles.put(id, new Ship(id, name, carryingCapacity, fuelCapacity, fuelCapacity));
                     break;
                 case 2:
+                    this.vehicles.put(id, new Truck(id, name, carryingCapacity, fuelCapacity, fuelCapacity));
                     break;
                 case 3:
+                    this.vehicles.put(id, new ReeferTruck(id, name, carryingCapacity, fuelCapacity, fuelCapacity));
                     break;
                 case 4:
+                    this.vehicles.put(id, new TankerTruck(id, name, carryingCapacity, fuelCapacity, fuelCapacity));
                     break;
                 default:
                     System.out.println("Invalid Vehicle type choice.");
                     return;
             }
             System.out.println("Vehicle created!");
-            System.out.println(this.containers.get(id).toString());
+            System.out.println(this.vehicles.get(id).toString());
+        } catch (Exception e) {
+            System.out.println("Error:" + e);
+        }
+    }
+
+    public Vehicle findVehicleById(String id) {
+        return this.vehicles.get(id);
+    }
+
+    public void deleteVehicleById(String id) {
+        Vehicle vehicle = this.vehicles.get(id);
+        if (!vehicle.getAllContainers().isEmpty()) {
+            for (Container container : vehicle.getAllContainers().values()) {
+                this.deleteContainerById(container.getId());
+            }
+        }
+        this.vehicles.remove(id);
+        System.out.println("Vehicle deleted");
+    }
+
+    public void updateVehicleById(String id, Scanner scanner) {
+        Vehicle vehicle = this.vehicles.get(id);
+        System.out.print("What is the name of the vehicle:");
+        String name = scanner.nextLine();
+        System.out.print("What is the carrying capacity (min 0, max 100):");
+        double carryingCapacity = scanner.nextDouble();
+        if (carryingCapacity < 0 || carryingCapacity > 100) {
+            System.out.println("Weight must be in range 0-100");
+            return;
+        }
+        System.out.print("What is the fuel capacity (min 5000, max 10000):");
+        double fuelCapacity = scanner.nextDouble();
+        if (fuelCapacity < 5000 || fuelCapacity > 10000) {
+            System.out.println("Weight must be in range 5000-10000");
+            return;
+        }
+        scanner.nextLine();
+        vehicle.setName(name);
+        vehicle.setCarryingCapacity(carryingCapacity);
+        vehicle.setFuelCapacity(fuelCapacity);
+        vehicle.setCurrentFuel(fuelCapacity);
+        System.out.println("Vehicle updated");
+    }
+
+    public void createPort(Scanner scanner) {
+        try {
+            System.out.print("What is the Port id:");
+            String id = scanner.nextLine();
+            if (this.ports.containsKey(id)) {
+                System.out.println("Port id must be unique");
+                return;
+            }
+            System.out.print("What is the name of the port:");
+            String name = scanner.nextLine();
+            System.out.print("What is the latitude (min 0, max 100):");
+            double latitude = scanner.nextDouble();
+            if (latitude < 0 || latitude > 100) {
+                System.out.println("latitude must be in range 0-100");
+                return;
+            }
+            scanner.nextLine();
+            System.out.print("What is the latitude (min 0, max 100):");
+            double longtitude = scanner.nextDouble();
+            if (longtitude < 0 || longtitude > 100) {
+                System.out.println("latitude must be in range 0-100");
+                return;
+            }
+            scanner.nextLine();
+            System.out.print("What is the storing capacity:");
+            double storingCapacity = scanner.nextDouble();
+            scanner.nextLine();
+            System.out.print("What is the landing Ability:");
+            boolean landingAbility = scanner.nextBoolean();
+            scanner.nextLine();
+            this.ports.put(id, new Port(id, name, latitude, longtitude, storingCapacity, landingAbility));
+            System.out.println("Port created!");
+            System.out.println(this.ports.get(id).toString());
         } catch (Exception e) {
             System.out.println("Error:" + e);
         }
@@ -324,7 +407,6 @@ public class SystemController {
     public void showRoleMenu() {
         System.out.println("Role: " + this.getCurrentUser().getRole());
         System.out.println("Select an option:");
-
         if (this.getCurrentUser().getRole() == UserRole.PORT_MANAGER || this.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
             System.out.println("1. View Data");
             System.out.println("2. Create Containers");
@@ -405,7 +487,7 @@ public class SystemController {
     public void unloadContainerFromVehicle(Vehicle vehicle, Container container) {
         Port currentPort = vehicle.getCurrentPort();
         if (currentPort.isUnloadable(container)) {
-            currentPort.unloadContainers(vehicle, container);
+            currentPort.unloadContainer(vehicle, container);
         }
     }
 

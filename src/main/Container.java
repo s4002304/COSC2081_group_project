@@ -32,6 +32,6 @@ public abstract class Container {
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nWeight: " + this.weight + "\nType: " + this.getClass().getSimpleName() + "\n";
+        return "Id: " + this.id + " Weight: " + this.weight + "  Type: " + this.getClass().getSimpleName() + "\n";
     }
 }

@@ -19,7 +19,7 @@ interface VehicleInterface {
 
     HashMap<String, Container> getAllContainers();
 
-    boolean isLoadable(HashMap<String, Container> containers);
+    boolean isLoadable(Container container);
 
     void loadContainer(Container container);
 

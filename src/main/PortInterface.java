@@ -21,11 +21,11 @@ interface PortInterface {
 
     HashMap<String, Container> getAllContainers();
 
-    void loadContainers(Vehicle vehicle, HashMap<String, Container> containers);
+    void loadContainer(Vehicle vehicle, Container container);
 
     boolean isUnloadable(Container container);
 
-    void unloadContainers(Vehicle vehicle, HashMap<String, Container> containers);
+    void unloadContainer(Vehicle vehicle, Container container);
 
     void removeVehicle(String id);
 

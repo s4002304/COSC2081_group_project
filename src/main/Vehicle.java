@@ -32,6 +32,22 @@ public abstract class Vehicle implements VehicleInterface {
         return this.name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCarryingCapacity(double carryingCapacity) {
+        this.carryingCapacity = carryingCapacity;
+    }
+
+    public void setFuelCapacity(double fuelCapacity) {
+        this.fuelCapacity = fuelCapacity;
+    }
+
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
+
     public Port getCurrentPort() {
         return this.currentPort;
     }
@@ -110,6 +126,6 @@ public abstract class Vehicle implements VehicleInterface {
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nName: " + this.name + "\nType: " + this.getClass().getSimpleName() + "\n";
+        return "Id: " + this.id + " Name: " + this.name + " Type: " + this.getClass().getSimpleName() + "\n";
     }
 }

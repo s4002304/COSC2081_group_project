@@ -80,13 +80,11 @@ public class Port implements PortInterface {
         return this.currentContainers;
     }
 
-    public void loadContainers(Vehicle vehicle, HashMap<String, Container> containers) {
-        if (vehicle.isLoadable(containers)) {
-            for (Container container : containers.values()) {
+    public void loadContainer(Vehicle vehicle, Container container) {
+        if (vehicle.isLoadable(container)) {
                 this.currentContainers.remove(container.getId());
                 vehicle.loadContainer(container);
             }
-        }
     }
 
     public boolean isUnloadable(Container container) {
@@ -95,7 +93,7 @@ public class Port implements PortInterface {
         return totalWeight + this.getTotalWeight() <= this.storingCapacity;
     }
 
-    public void unloadContainers(Vehicle vehicle, Container container) {
+    public void unloadContainer(Vehicle vehicle, Container container) {
         vehicle.unloadContainer(container);
         this.currentContainers.put(container.getId(), container);
     }

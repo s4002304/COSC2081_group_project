@@ -1,14 +1,12 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         SystemController controller = new SystemController();
-
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("COSC2081 GROUP ASSIGNMENT");
         System.out.println("CONTAINER PORT MANAGEMENT SYSTEM");
         System.out.println("Instructor: Mr. Minh Vu & Dr. Phong Ngo");
@@ -18,7 +16,7 @@ public class Main {
         System.out.println("s3927046, To Hai Dang");
         System.out.println("------------------------------------------------");
 
-        boolean isRunning = true; // Add a flag to control the application's state
+        boolean isRunning = true;
 
         while (isRunning) {
             System.out.println("1. Login");
@@ -40,19 +38,17 @@ public class Main {
                         controller.login(username, password);
 
                         if (controller.isLoggedIn()) {
-                            System.out.println("Login successful. Welcome, "
-                                    + username + "!");
+                            System.out.println("Login successful. Welcome, " + username + "!");
                         } else {
                             System.out.println("Invalid username or password. Please try again.");
                         }
                     } else {
-                        System.out.println(
-                                "You are already logged in as.");
+                        System.out.println("You are already logged in.");
                     }
                     break;
                 case 2:
                     System.out.println("Stopping the Container Port Management System. Goodbye!");
-                    isRunning = false; // Stop the system
+                    isRunning = false;
                     break;
                 default:
                     System.out.println("Invalid choice. Please select a valid option.");
@@ -60,29 +56,37 @@ public class Main {
             }
 
             if (controller.isLoggedIn() && isRunning) {
-                // User is logged in, show role-based menu
-                controller.showRoleMenu();
-                choice = Integer.parseInt(scanner.nextLine());
+                boolean backToRoleMenu = true; // Add a flag to return to the role menu
+                while (backToRoleMenu) {
+                    // User is logged in, show role-based menu
+                    controller.showRoleMenu();
+                    int roleChoice = Integer.parseInt(scanner.nextLine());
 
-                switch (choice) {
-                    case 1:
-                        controller.createContainer(scanner);
-                        break;
-                    case 2:
-                        // Call methods from the controller for functionalities
-                        break;
-                    case 3:
-                        // Call methods from the controller for functionalities
-                        break;
-                    case 0:
-                        controller.logout(); // Logout
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please select a valid option.");
-                        break;
+                    switch (roleChoice) {
+                        case 1:
+                            if (controller.getCurrentUser().getRole() == UserRole.PORT_MANAGER ||
+                                    controller.getCurrentUser().getRole() == UserRole.SYSTEM_ADMIN) {
+                                // Call the view data method for the current user's role
+                                controller.listData();
+                            }
+                            break;
+                        case 2:
+                            controller.createContainer(scanner);
+                            break;
+                        case 3:
+                            // Call methods from the controller for other functionalities
+                            break;
+                        case 0:
+                            // Logout
+                            controller.logout();
+                            backToRoleMenu = false;
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please select a valid option.");
+                            break;
+                    }
                 }
             }
         }
     }
-
 }
